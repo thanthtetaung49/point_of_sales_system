@@ -26,7 +26,7 @@
                                         <img class="w-50" src="{{ asset('defaultImage/defaultMale.jfif') }}"
                                              alt="product_default">
                                     @else
-                                        <img class="w-50" src="{{ asset('storage/productImage/' . $item->image_name) }}"
+                                        <img class="w-50" src="{{ asset('storage/profileImage/' . $item->image_name) }}"
                                              alt="{{ $item->image_name }}">
                                     @endif
                                 </td>
