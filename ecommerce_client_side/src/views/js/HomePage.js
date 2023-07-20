@@ -12,7 +12,7 @@ export default {
         return {
             items: [],
             currentPage: 1,
-            itemsPerPage: 20,
+            itemsPerPage: 8,
             searchKey: '',
             category: [],
             categoryFilterValue: [],

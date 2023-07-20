@@ -8,20 +8,24 @@
                     <thead>
                         <tr>
                             <th class="text-center">Order Code</th>
+                            <th class="text-center">D/M/Y</th>
                             <th class="text-center">Total Price</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($salesTotal as $item)
                             <tr>
-                                <td class="col-3 text-center">{{ $item['order_code'] }}</td>
-                                <td class="col-3 text-center">{{ $item['total_price'] }} Kyats</td>
+                                <td class="col-3 text-center">{{ $item->order_code }}</td>
+                                <td class="col-3 text-center">{{ $item->created_at->format('d/m/Y') }}</td>
+                                <td class="col-3 text-center">
+                                    {{ $item->total_price }} Kyats
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th class="text-center" colspan="1">Total</th>
+                            <th class="text-center" colspan="2">Total</th>
                             <th class="text-center">{{ $sumTotalPrice }} Kyats</th>
                         </tr>
                     </tfoot>
@@ -54,7 +58,7 @@
             let orderCode = document.querySelectorAll('.orderCode');
             orderCode.forEach(element => {
                 let orderCodeData = {
-                    orderCode : element.value
+                    orderCode: element.value
                 }
                 console.log(orderCodeData);
             });

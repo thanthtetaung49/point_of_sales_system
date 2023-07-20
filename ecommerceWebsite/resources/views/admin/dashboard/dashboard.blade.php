@@ -7,7 +7,7 @@
                 <div class="box one w-100 rounded shadow-sm d-flex align-items-center p-2">
                     <div>
                         <h6 class="text-light">Total Earn</h6>
-                        <h3 class="text-light"><i class="fa-solid fa-dollar-sign fa-2x"></i> {{ $sumTotalPrice }} Kyats</h3>
+                        <h3 class="text-light"><i class="fa-solid fa-money-bill fa-2x"></i> {{ $sumTotalPrice }} Ks</h3>
                     </div>
                 </div>
             </div>
@@ -15,7 +15,7 @@
                 <div class="box two w-100 rounded shadow-sm d-flex align-items-center p-2">
                     <div>
                         <h6 class="text-light">Total Product</h6>
-                        <h3 class="text-light"><i class="fa-solid fa-box fa-2x me-2"></i>{{ $sum }} items</h3>
+                        <h3 class="text-light"><i class="fa-solid fa-boxes-stacked fa-2x me-2"></i>{{ $sum }} items</h3>
                     </div>
                 </div>
             </div>

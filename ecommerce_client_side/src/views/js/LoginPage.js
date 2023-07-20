@@ -38,7 +38,8 @@ export default {
                 'password': this.userPassword
             }
 
-            axios.post('http://localhost:8000/api/login/post', userData)
+            if (this.userEmail != '' && this.userPassword != '') {
+                axios.post('http://localhost:8000/api/login/post', userData)
                 .then((response) =>
                 {
                     console.log(response);
@@ -54,6 +55,10 @@ export default {
                     }
                 })
                 .catch(error => console.log(error));
+            } else {
+                this.emailStatus = this.userEmail == '' ? true : false;
+                this.passwordStatus = this.userPassword == '' ? true : false;
+            }
         }
     },
     mounted () {

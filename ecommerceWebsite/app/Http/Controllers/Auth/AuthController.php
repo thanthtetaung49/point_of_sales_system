@@ -117,6 +117,8 @@ class AuthController extends Controller
     {
         User::where('id', Auth::user()->id)->delete();
         Auth::logout();
+
+        return redirect()->route('loginPage');
     }
 
     // profile validation check
