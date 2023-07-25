@@ -33,7 +33,7 @@ class CategoryController extends Controller
             "name" => $request->categoryName
         ]);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('categoryListPage');
     }
 
     // direct category update page
@@ -53,7 +53,7 @@ class CategoryController extends Controller
             "name" => $request->categoryName
         ]);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('categoryListPage');
     }
 
     // category delete

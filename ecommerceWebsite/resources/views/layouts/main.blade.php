@@ -114,7 +114,6 @@
                                 </div>
                             </div>
                         </nav>
-
                         @yield('dataSection')
                     </div>
                 </div>

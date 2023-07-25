@@ -64,7 +64,7 @@
                                 <td class="col-2 text-center">{{ $item->product_name }}</td>
                                 <td class="text-center">{{ $item->order_code }}</td>
                                 <td class="text-center">{{ $item->order_qty }} pieces</td>
-                                <td class="text-center">{{ $item->created_at->format('d/M/Y') }} </td>
+                                <td class="text-center">{{ $item->orderDate }} </td>
                                 <td class="text-center">{{ $item->total_price }} Kyats</td>
                             </tr>
                         @endforeach

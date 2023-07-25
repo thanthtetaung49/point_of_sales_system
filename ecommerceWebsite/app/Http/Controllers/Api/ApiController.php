@@ -90,7 +90,7 @@ class ApiController extends Controller
             'product_id' => $request->id,
             'order_code' => $request->orderCode,
             'order_qty' => $request->quantity,
-            'total_price' => $request->total,
+            'total_price' => $request->quantity * $request->itemPrice,
             'day' => $request->day,
             'month' => $request->month,
             'year' => $request->year

@@ -8,19 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class SalesListController extends Controller
 {
-    // direct  sales list page
+    // direct sales list page
     public function salesListPage()
     {
-        $salesListData = Order::select('*', 'products.name as product_name')
+        $salesListData = Order::select('*', 'products.name as product_name', 'orders.created_at as orderDate')
             ->leftJoin('products', 'orders.product_id', 'products.id')
-            ->orderBy('orders.created_at', 'desc')->paginate(5);
+            ->orderBy('orders.id', 'desc')->paginate(30);
+        // dd($salesListData->toArray());
 
         $day = Order::select('day')
             ->groupBy('day')
             ->get();
+
         $month = Order::select('month')
             ->groupBy('month')
             ->get();
+
         $year = Order::select('year')
             ->groupBy('year')
             ->get();
@@ -35,9 +38,8 @@ class SalesListController extends Controller
             ->groupBy('order_code', 'total_price')
             ->get()->toArray();
 
-        $salesTotal = Order::select('order_code', DB::raw('SUM(total_price) as total_price'), DB::raw('MAX(created_at) as created_at'))
-            ->groupBy('order_code')
-            ->orderBy('id', 'desc')
+        $salesTotal = Order::select('id','order_code', 'total_price', DB::raw('MAX(created_at) as created_at'))
+            ->groupBy('id', 'order_code', 'total_price')
             ->paginate(5);
 
         $sumTotalPrice = 0;
@@ -52,12 +54,12 @@ class SalesListController extends Controller
     public function filterDate(Request $request)
     {
         if ($request->filterDate == '' || $request->filterMonth == '' || $request->filterYear) {
-            $salesListData = Order::select('*', 'products.name as product_name')
+            $salesListData = Order::select('*', 'products.name as product_name', 'orders.created_at as orderDate')
                 ->leftJoin('products', 'orders.product_id', 'products.id')
                 ->orderBy('orders.created_at', 'desc')
                 ->paginate(5);
         } else {
-            $salesListData = Order::select('*', 'products.name as product_name')
+            $salesListData = Order::select('*', 'products.name as product_name', 'orders.created_at as orderDate')
                 ->leftJoin('products', 'orders.product_id', 'products.id')
                 ->orderBy('orders.created_at', 'desc')->where('day', $request->filterDate)
                 ->where('month', $request->filterMonth)

@@ -46,7 +46,7 @@ export default {
                     if (response.data.token) {
                         this.$store.dispatch('loginToken', response.data.token);
                         this.$router.push({
-                            name: 'homePage'
+                            name: 'productPage'
                         });
                     } else {
                         this.$router.push({
@@ -62,6 +62,6 @@ export default {
         }
     },
     mounted () {
-        console.log(this.getToken);;
+        console.log(this.getToken);
     },
 };

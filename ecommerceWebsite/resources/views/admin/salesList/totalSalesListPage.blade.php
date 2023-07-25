@@ -7,6 +7,7 @@
                 <table id="table">
                     <thead>
                         <tr>
+                            <th class="text-center">ID</th>
                             <th class="text-center">Order Code</th>
                             <th class="text-center">D/M/Y</th>
                             <th class="text-center">Total Price</th>
@@ -15,6 +16,7 @@
                     <tbody>
                         @foreach ($salesTotal as $item)
                             <tr>
+                                <td class="col-3 text-center">{{ $item->id }}</td>
                                 <td class="col-3 text-center">{{ $item->order_code }}</td>
                                 <td class="col-3 text-center">{{ $item->created_at->format('d/m/Y') }}</td>
                                 <td class="col-3 text-center">
@@ -25,7 +27,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th class="text-center" colspan="2">Total</th>
+                            <th class="text-center" colspan="3">Total</th>
                             <th class="text-center">{{ $sumTotalPrice }} Kyats</th>
                         </tr>
                     </tfoot>

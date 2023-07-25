@@ -9,7 +9,7 @@
         </div>
 
         <div class="col-4 offset-8 mt-3">
-            <form action="{{ route('dashboard') }}" method="GET">
+            <form action="{{ route('categoryListPage') }}" method="GET">
                 @csrf
                 <div class="d-flex">
                     <input class="form-control" name="search" type="text" value="{{ request('search') }}"

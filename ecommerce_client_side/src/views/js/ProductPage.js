@@ -1,9 +1,6 @@
 import { mapGetters } from 'vuex';
-import { ref } from 'vue';
 import axios from "axios";
 import Cart from './../HomePage/CartPage.vue'
-
-const currentPage = ref(1);
 
 export default {
     name: "HomePage",
@@ -12,25 +9,24 @@ export default {
         return {
             items: [],
             currentPage: 1,
-            itemsPerPage: 8,
+            itemsPerPage: 4,
             searchKey: '',
             category: [],
             categoryFilterValue: [],
-            invoice: [],
+            orderData: [],
             total: 0,
+            invoice: [],
             day: '',
             month: '',
             year: '',
-            orderData: [],
-            loadingStatus: false,
-            paginationStatus: false
+            loadingStatus: false
         }
     },
     components: {
         Cart
     },
     computed: {
-        ...mapGetters(['getToken', 'getQuantity', 'getid', 'getStatus']),
+        ...mapGetters(['getToken', 'getQuantity', 'getid', 'getStatus', 'getItemePrice']),
         totalPages()
         {
             return Math.ceil(this.items.length / this.itemsPerPage);
@@ -71,13 +67,14 @@ export default {
             axios.get('http://localhost:8000/api/product')
                 .then((response) =>
                 {
-                    // console.log(response.data.productData);
                     this.items = response.data.productData;
 
                     for (let i = 0; i < this.items.length; i++) {
                         const product = this.items[i];
                         product.item_image = `http://localhost:8000/storage/productImage/${product.item_image}`;
                     }
+
+                    this.loadingStatus = false;
                 })
                 .catch(error => console.log(error));
         },
@@ -122,9 +119,16 @@ export default {
                 })
                 .catch(error => error);
         },
+        productPage(id, quantity, totalPrice) {
+            this.$router.push({
+                name: "productDetail"
+            });
+        },
         cart(itemPrice, itemName, itemId)
         {
             this.$store.dispatch('storeId', itemId);
+            this.$store.dispatch('storeItemPrice', itemPrice);
+
             let invoiceData = {
                 name: itemName,
                 price: itemPrice,
@@ -143,11 +147,45 @@ export default {
             let order = {
                 id: this.getid,
                 quantity: this.getQuantity,
+                itemPrice: this.getItemePrice
             }
-            this.orderData.push(order);
-            // this.$store.dispatch('storeStatus', true);
-            this.$store.dispatch('storeQuantity', 0);
 
+            this.$store.dispatch('storeQuantity', 1);
+            this.orderData.push(order);
+        },
+        clear()
+        {
+            this.invoice = [];
+            this.total = 0;
+        },
+        order()
+        {
+            let orderCode = 'O/CODE-' + Math.floor(Math.random() * 10000);
+            this.orderData.forEach(data =>
+            {
+                let orderData = {
+                    id: data.id,
+                    quantity: data.quantity,
+                    itemPrice : data.itemPrice,
+                    total: this.total,
+                    day: this.day,
+                    month: this.month,
+                    year: this.year,
+                    orderCode: orderCode
+                }
+
+                console.log(orderData);
+
+                axios.post('http://localhost:8000/api/order', orderData)
+                    .then((response) =>
+                    {
+                        location.reload();
+                    })
+                    .catch(error => console.log(error));
+            });
+
+            this.invoice = [];
+            this.total = 0;
         },
         calendar()
         {
@@ -163,37 +201,6 @@ export default {
             this.month = months[index];
             this.year = year;
         },
-        clear()
-        {
-            this.invoice = [];
-            this.total = 0;
-        },
-        order()
-        {
-            let orderCode = 'O/CODE-' + Math.floor(Math.random() * 10000);
-            this.orderData.forEach(data =>
-            {
-                let orderData = {
-                    id: data.id,
-                    quantity: data.quantity,
-                    total: this.total,
-                    day: this.day,
-                    month: this.month,
-                    year: this.year,
-                    orderCode: orderCode
-                }
-
-                axios.post('http://localhost:8000/api/order', orderData)
-                    .then((response) =>
-                    {
-                        console.log(response);
-                    })
-                    .catch(error => console.log(error));
-            });
-
-            this.invoice = [];
-            this.total = 0;
-        }
     },
 
     mounted()
@@ -201,22 +208,19 @@ export default {
         this.products();
         this.categoryName();
         this.calendar();
+        this.loadingStatus = true;
         axios.get('http://localhost:8000/api/product')
             .then((response) =>
             {
-                console.log(response.data.productData);
+                // console.log(response.data.productData);
                 this.items = response.data.productData;
 
                 for (let i = 0; i < this.items.length; i++) {
                     const product = this.items[i];
                     product.item_image = `http://localhost:8000/storage/productImage/${product.item_image}`;
                 }
-                this.loadingStatus = false;
-                this.paginationStatus = true;
             })
             .catch(error => console.log(error));
-
-        this.loadingStatus = true;
     },
 }
 

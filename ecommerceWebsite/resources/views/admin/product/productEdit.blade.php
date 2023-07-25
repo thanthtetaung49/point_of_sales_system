@@ -78,10 +78,17 @@
                             </div>
                             <div class="form-group my-3">
                                 <label for="productQty">Product Quantity</label>
-                                <input class="form-control" id="productQty" name="productQty" type="number"
-                                       value="{{ old('productQty', $productData->qty) }}"
-                                       placeholder="Enter product quantity..." />
-                                @error('productCode')
+                                <div class="d-flex">
+                                    <input class="form-control me-1" id="productQty" name="productQty" type="number"
+                                           value="{{ old('productQty', $productData->qty) }}"
+                                           placeholder="Enter product quantity..." disabled/>
+                                    <button id="addBtn" class="btn bg-dark text-light" type="button">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                                <input type="number" id="addItem" class="form-control mt-2" name="addQty" placeholder="Add Item">
+
+                                @error('addQty')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -94,4 +101,14 @@
             </div>
         </form>
     </div>
+@endsection
+
+@section('js')
+    <script type="text/javascript">
+    $("#addItem").hide();
+
+        $("#addBtn").click(function () {
+            $("#addItem").toggle();
+        });
+    </script>
 @endsection

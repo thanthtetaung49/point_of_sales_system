@@ -14,6 +14,7 @@ class ProductController extends Controller
     public function productPage()
     {
         $productData = Product::select("products.*", "categories.name as category_name")->leftJoin('categories', 'products.category_id', 'categories.id')
+            ->orderBy('created_at', 'desc')
             ->when(request('search'), function ($query) {
                 $key = request('search');
                 $query->orWhere('products.name', 'like', '%' . $key . '%')
@@ -21,7 +22,7 @@ class ProductController extends Controller
                     ->orWhere('products.product_code', 'like', '%' . $key . '%')
                     ->orWhere('products.item_price', 'like', '%' . $key . '%');
             })
-            ->paginate(2);
+            ->paginate(5);
 
         return view('admin.product.productList', compact('productData'));
     }
@@ -66,12 +67,14 @@ class ProductController extends Controller
     // direct product update
     public function productUpdate(Request $request)
     {
+        $addQuantity = Product::select('qty')->where('id', $request->productId)->first();
+        $finalQuantity = $addQuantity->qty+$request->addQty;
+
         Validator::make($request->all(), [
             "productName" => "required|unique:products,name," . $request->productId,
             "productCategory" => "required",
             "productPrice" => "required",
             "productCode" => "required|unique:products,product_code," . $request->productId,
-            "productQty" => "required",
             "productImage" => "mimes:jpg,jpeg,png,webp,jfif"
         ])->validate();
 
@@ -89,11 +92,16 @@ class ProductController extends Controller
             Product::where('id', $request->productId)->update([
                 'item_image' => $fileName
             ]);
-        } else {
-            Product::where('id', $request->productId)->update([
-                'item_image' => 'null'
-            ]);
         }
+
+        Product::where('id', $request->productId)->update([
+            "name" => $request->productName,
+            "category_id" => $request->productCategory,
+            "item_price" => $request->productPrice,
+            "product_code" => $request->productCode,
+            "qty" => $finalQuantity
+        ]);
+
         return redirect()->route('productPage')->with([
             'updateMessage' => 'Product is updated.'
         ]);
